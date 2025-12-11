@@ -1,3 +1,6 @@
 /dist/
 /target/
 /Cargo.lock
+/node-modules/
+/src-tauri/gen/android/
+/.vscode/
