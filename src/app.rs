@@ -188,6 +188,19 @@ pub fn App() -> impl IntoView {
             set_amount.set("".to_string());
         }
     };
+        let remove_transaction = move |tx: Transaction| {
+            let list = transactions.get();
+            for t in list {
+                if t.id == tx.id {
+                    set_transactions.update(|list| {
+                        if let Some(pos) = list.iter().position(|x| x.id == t.id) {
+                            list.remove(pos);
+                        }
+                    });
+                    break;
+                }
+            }
+    };
 
     let update_general_limit = move |val_str: String| {
         let val = val_str.parse::<f64>().unwrap_or(0.0).abs();
@@ -351,7 +364,6 @@ pub fn App() -> impl IntoView {
             }
         }
 
-        // 2. AKTUALIZACJA STANU I KONWERSJA (on:input)
         on:input=move |ev| {
             let value = event_target_value(&ev);
             let mut sanitized_value = String::new();
@@ -371,8 +383,6 @@ pub fn App() -> impl IntoView {
                     sanitized_value = format!("{}.{}", integer_part, trimmed_decimal);
                 }
             }
-
-            // Aktualizacja sygnału
             set_amount.set(sanitized_value);
         }
 
@@ -398,26 +408,37 @@ pub fn App() -> impl IntoView {
                                     <ul class="divide-y divide-slate-200 dark:divide-slate-700">
                                          <For each=move || { let sel = selected_month_str.get(); transactions.get().into_iter().filter(move |t| t.date.starts_with(&sel)).collect::<Vec<_>>() }
                                         key=move |t| (t.id, currency.get())
+                                        
                                         children=move |tx| {
+                                            let tx_clone = tx.clone();
                                             view! {
-                                            <li class="py-4 flex justify-between items-center px-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg transition overflow-hidden">
-                <div class="flex items-center gap-3 flex-1 min-w-0">
+                                            <li class="py-4 flex justify-between items-center px-3 hover:bg-slate-50 
+                                            dark:hover:bg-slate-700/50 rounded-lg transition overflow-hidden">
+                                            <div class="flex items-center gap-3 flex-1 min-w-0">
 
-                    <div class="w-2 h-10 bg-emerald-500 rounded-full opacity-50 shrink-0"></div>
+                                                <div class="w-2 h-10 bg-emerald-500 rounded-full opacity-50 shrink-0"></div>
 
-                    <div class="min-w-0">
-                        <p class="font-bold text-lg truncate pr-2">{tx.title}</p> <p class="text-sm opacity-60 font-medium flex gap-2 truncate">
-                            <span>{move || format_date_display(&tx.date, &language.get())}</span>
-                            <span class="opacity-50">"•"</span>
-                            <span class="text-emerald-600 dark:text-emerald-400 truncate">{move || t(&tx.category, &language.get())}</span>
-                        </p>
-                    </div>
-                </div>
+                                <div class="min-w-0">
+                                    <p class="font-bold text-lg truncate pr-2">{tx.title}</p> <p class="text-sm opacity-60 font-medium flex gap-2 truncate">
+                                    <span>{move || format_date_display(&tx.date, &language.get())}</span>
+                                    <span class="opacity-50">"•"</span>
+                                    <span class="text-emerald-600 dark:text-emerald-400 truncate">{move || t(&tx.category, &language.get())}</span>
+                                </p>
+                                </div>
+                            </div>
 
                 <div class="text-right shrink-0 ml-2">
                     <p class="font-bold text-lg text-red-600 dark:text-red-400 whitespace-nowrap">
                 {move || format!("-{}", format_currency(tx.amount, &currency.get(), "any").replace("-", ""))}
             </p>
+            
+                <button class="mt-4 w-full bg-emerald-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-emerald-700 transition shadow-lg shadow-emerald-600/20" 
+                
+                on:click=move |_| {
+                    remove_transaction(tx_clone.clone());
+                 }>
+                                         {move || t("remove_transaction", &language.get())}
+                                    </button>
                 </div>
             </li>
                                         }} />

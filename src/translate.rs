@@ -25,6 +25,8 @@ pub fn t(key: &str, lang: &str) -> String {
         ("en", "general_limit") => "General Limit",
         ("pl", "add_transaction") => "Dodaj Transakcję",
         ("en", "add_transaction") => "Add Transaction",
+        ("pl", "remove_transaction") => "Usuń Transakcję",
+        ("en", "remove_transaction") => "Remove Transaction",
         ("pl", "name_placeholder") => "Nazwa",
         ("en", "name_placeholder") => "Name",
         ("pl", "amount_placeholder") => "Kwota",
