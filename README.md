@@ -17,6 +17,5 @@ rustup target add wasm32-unknown-unknown
 
 ## Uruchomienie aplikacji
 ```bash
-cd przepisy-main/przepisy
 cargo tauri dev
 ```
