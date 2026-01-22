@@ -1,7 +1,22 @@
-# Tauri + Leptos
+# Wymagania
+- [Node.js](https://nodejs.org/en)
+- [Zależności systemowe](https://v2.tauri.app/start/prerequisites/#system-dependencies)
+- [Rust](https://rust-lang.org/)
 
-This template should help get you started developing with Tauri and Leptos.
+## Tauri CLI
+```bash
+# Instalacja Tauri CLI w wersji 2.x
+cargo install tauri-cli --version "^2.0.0" --locked
 
-## Recommended IDE Setup
+# Instalacja Trunk
+cargo install trunk
 
-[VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+# Dodanie celu kompilacji dla WebAssembly
+rustup target add wasm32-unknown-unknown
+```
+
+## Uruchomienie aplikacji
+```bash
+cd przepisy-main/przepisy
+cargo tauri dev
+```
